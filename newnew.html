@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+
+    <title>Save Image</title>
+  <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+        <script type="text/javascript" src="javascript/urldemo.js"></script>
+  <meta name="viewport" content="width=device-width"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+
+    <!-- Added the following three libs refernces for Backbone -->
+    <script type='text/javascript' src='libs/jquery-1.5.1.min.js'></script>
+    <script type='text/javascript' src='libs/underscore.js'></script>
+    <script type='text/javascript' src='libs/backbone.js'></script>
+    <script type='text/javascript' src='libs/webtoolkit.base64.js'></script>
+    <script type='text/javascript' src='libs/sha1.js'></script>
+    <script type='text/javascript' src='libs/jquery.form.js'></script>
+    <script type='text/javascript' src='libs/base64-binary.js'></script>
+    <script type='text/javascript' src='app/image_saver.js'></script>
+
+    <!-- Bootstrap -->
+    <script type='text/javascript' src='app/bootstrap.js'></script>
+
+    <!-- Templates -->
+    <script type="text/template" id="image-preview-template">
+      <p><%= filename %></p>
+      <img id="imagePreview" src='<%= data %>' />
+    </script>
+
+    <script type="text/template" id="image-meta-template">
+      <input type="hidden" name="key" value='<%= key %>' />
+      <input type="hidden" name="acl" value='<%= acl %>' />
+      <input type="hidden" name="Content-Type" value='<%= contentType %>' />
+      <input type="hidden" name="AWSAccessKeyId" value='<%= AWSAccessKeyId %>' />
+      <input type="hidden" name="success_action_redirect" value='<%= successActionRedirect %>' />
+      <input type="hidden" name="x-amz-meta-filename" value='<%=filename %>' />
+      <input type="hidden" name="Policy" value='<%= POLICY %>' />
+      <input type="hidden" name="Signature" value='<%= SIGNATURE %>' />
+    </script> 
+
+    <script type="text/template" id="image-file-template" onsubmit="comm();">
+      <form id="formBlob" action='http://<%= bucket %>.s3.amazonaws.com' method="post" enctype="multipart/form-data" name="photos[]" multiple/ onsubmit="validate();">
+  <input id="myImage" type="file" name="file" /><br />
+  <input id="btnSave" type="submit" value="Save Image"></input>
+      </form>
+    </script>
+
+
+</head>
+
+<body onload="start();">
+
+  <script type="text/javascript">
+
+
+    var shortened;
+    var myDataRef = new Firebase('https://crossplatform.firebaseio.com/');
+    var random = makeid();
+    var filename;
+    var fullPath;
+    var res;
+    var urlpath;
+    var form = document.getElementById('formBlob');
+    var fileSelect = document.getElementById('myImage');
+    var uploadButton = document.getElementById('btnSave');
+
+    function start() {
+
+      console.log("Hello World!");
+        var x = document.getElementById("long-url");
+        x.setAttribute("type", "hidden");
+    }
+
+    function validate() {
+      console.log("This is working!");
+    fullPath = document.getElementById('myImage').value;
+  
+    if (fullPath) {
+      var startIndex = (fullPath.indexOf('\\') >= 0 ? fullPath.lastIndexOf('\\') : fullPath.lastIndexOf('/'));
+      filename = fullPath.substring(startIndex);
+      if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) {
+        filename = filename.substring(1);
+      } else {
+        console.log("Internal Error");
+      } 
+    } else {
+      console.log("Didnt get that file!");
+    }
+
+    res = filename.replace(/ /g, "+");
+    urlpath = "https://s3-ap-southeast-1.amazonaws.com/piedpiper/spike/" + res;
+    myDataRef.push({name: filename, path: urlpath, id:random});
+    console.log("Reached here");
+
+    var x = document.getElementById("long-url");
+    x.setAttribute("value", urlpath);
+    console.log(x.value);
+
+    last();
+    }
+
+    function makeid()
+  {
+      var text = "";
+      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+      for( var i=0; i < 5; i++ )
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
+      return text;
+  }
+
+  function last() {
+    var element = document.getElementById("header");
+    element.innerHTML = random;
+  }
+
+  </script>
+  <div id='container' />
+  </div>
+  <h1 id="header">Upload your file here</h1>
+        <input type="text" id="long-url" name="long-url" value="" />
+        <a href="javascript:;" id="shorten-url">
+          Get Shareable Link
+        </a>
+        <span id="shortened-url"><a href=""></a></span>
+</body>
+</html>

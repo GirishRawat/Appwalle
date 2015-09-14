@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+<body>
+
+<p>When you submit the form, a function is triggered which alerts some text.</p>
+
+<form id="crosspin">
+  Enter name: <input type="text" id="fname">
+  Enter domain choice: <input type="text" id="fchoice">
+  Enter contact number: <input type="text" id="fnumber">
+  Enter contact email: <input type="text" id="femail">
+  
+  <input type="submit" value="Submit">
+</form>
+
+<script>
+var myDataRef = new Firebase('https://job-secure.firebaseio.com/');
+console.log("This is working!");
+
+	document.getElementById("crosspin").onsubmit = function(e) {
+		var name1 = document.getElementById('fname').value;
+		var emailid = document.getElementById('fnumber').value;
+		var number = document.getElementById('femail').value;
+		var choice = document.getElementById('fchoice').value;
+		console.log(name1);
+		console.log(emailid);
+		console.log(number);	
+		e.preventDefault();
+		var myDataRef = new Firebase('https://job-secure.firebaseio.com/');
+		myDataRef.push({namer: name1, email: emailid, number:number, choice:choice});
+		console.log("Reached here!");
+	};
+
+</script>
+
+</body>
+</html>

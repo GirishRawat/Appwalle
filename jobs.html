@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Jobs</title>
+	<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+<body>
+<p></p>
+
+<script type="text/javascript">
+
+
+// Retrieve new posts as they are added to our database
+// Get a reference to our posts
+var ref = new Firebase("https://job-secure.firebaseio.com/");
+
+function print(x,y,z,k) {
+		$("p").prepend("</br>");
+	$("p").prepend(z);
+	$("p").prepend("</br>");
+	$("p").prepend(k);
+	$("p").prepend("</br>");
+	$("p").prepend(y);
+		$("p").prepend("</br>");
+	$("p").prepend(x);
+		$("p").prepend("</br>");
+	console.log(y);
+	console.log(z);
+}
+
+// Retrieve new posts as they are added to our database
+ref.on("child_added", function(snapshot, prevChildKey) {
+  var newPost = snapshot.val();
+  var namer1 = newPost.namer;
+  var number1 = newPost.number;
+  var email1 = newPost.email;
+  var choice1 = newPost.choice;
+  console.log("Name: " + namer1);
+  console.log("Number: " + number1);
+  console.log("Email: " + email1);
+  console.log("looping here!");
+
+  print(namer1, number1, email1, choice1);
+});
+
+
+</script>
+</body>
+</html>

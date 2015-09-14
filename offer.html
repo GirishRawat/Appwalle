@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Offer a job</title>
+	<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+</head>
+<body>
+<form id="formBlob" onsubmit="start()">
+	Name: <input id="myImage" type="text" name="Name: " /><br/>
+	Email ID: <input id="btnSave" type="text" /><br/>
+	Number: <input id="final" type="text"><br>
+	<input id="btnSave" type="submit" value="Save Image"></input>
+ </form>
+
+<script type="text/javascript">
+	var myDataRef = new Firebase('https://job-secure.firebaseio.com/');
+	console.log("This is working!");
+
+	function start() {
+		validate();
+	}
+
+	function validate() {
+			var name1 = document.getElementById('myImage');
+			var emailid = document.getElementById('btnSave');
+			var number = document.getElementById('final');
+			console.log(name1);
+			console.log(emailid);
+			console.log(number);
+		myDataRef.push({namer: name1, email: emailid, number:number});
+		console.log("Reached here!");
+	}
+	</script>
+</body>
+</html>
